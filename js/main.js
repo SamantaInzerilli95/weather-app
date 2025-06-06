@@ -1,4 +1,4 @@
-const apiKey = "c8c31816f1c7d878c5b08e7a5b2fb95e"; // Asegúrate de cambiar esto por "c8c31816f1c7d878c5b08e7a5b2fb95e" antes de subir a GitHub
+const apiKey = "c8c31816f1c7d878c5b08e7a5b2fb95e"; // ¡IMPORTANTE! Cambia esto por tu clave real antes de subir a GitHub Pages
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 const currentWeatherDiv = document.getElementById("current-weather");
@@ -66,7 +66,7 @@ async function getWeatherByCoords(lat, lon) {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`
     );
     if (!currentRes.ok)
-      throw new Error("No se pudieron obtener los datos de ubicación.");
+      throw new new Error("No se pudieron obtener los datos de ubicación.")();
     currentWeatherData = await currentRes.json();
 
     // Petición para el pronóstico
@@ -87,19 +87,12 @@ async function getWeatherByCoords(lat, lon) {
 
 // showCurrentWeather ahora acepta un segundo parámetro para el tipo de datos
 function showCurrentWeather(data, type = "forecast") {
-  // --- Console.logs para depuración ---
-  // console.log('Datos pasados a showCurrentWeather:', data);
-  // console.log('Contenido de data.weather:', data.weather);
-  // if (data.weather && data.weather[0]) {
-  //     console.log('Icon code:', data.weather[0].icon);
-  // } else {
-  //     console.log('ERROR: data.weather o data.weather[0] no está definido.');
-  // }
-  // --- FIN console.logs ---
-
-  // Agregado fallback: si no hay icono, usa '01d' (sol)
+  // Agregado un fallback más robusto: si el icono no existe, usa '01d' (sol)
+  // También asegúrate de que data.weather y data.weather[0] existan antes de acceder a .icon
   const iconCode =
-    data.weather && data.weather[0] ? data.weather[0].icon : "01d";
+    data.weather && data.weather[0] && data.weather[0].icon
+      ? data.weather[0].icon
+      : "01d";
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
 
   let title = "";
@@ -180,16 +173,24 @@ function showForecast(data) {
       dayLabel = date.toLocaleDateString("es-ES", options);
     }
 
-    const iconCode = item.weather[0].icon;
+    // Agregado un fallback aquí también para los iconos del pronóstico
+    const iconCode =
+      item.weather && item.weather[0] && item.weather[0].icon
+        ? item.weather[0].icon
+        : "01d";
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
     const itemDateStr = date.toISOString().split("T")[0];
 
     html += `
                 <div class="day-forecast" data-day-index="${index}" data-date="${itemDateStr}">
                     <p><strong>${dayLabel}</strong></p>
-                    <img src="${iconUrl}" alt="${item.weather[0].description}" class="weather-icon" />
+                    <img src="${iconUrl}" alt="${
+      item.weather[0] ? item.weather[0].description : "icono del clima"
+    }" class="weather-icon" />
                     <p>🌡️ ${item.main.temp}°C</p>
-                    <p>☁️ ${item.weather[0].description}</p>
+                    <p>☁️ ${
+                      item.weather[0] ? item.weather[0].description : "N/A"
+                    }</p>
                     <p>💨 Viento: ${item.wind.speed} m/s</p>
                 </div>
             `;

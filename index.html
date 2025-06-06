@@ -14,13 +14,15 @@
         <button id="searchBtn">Buscar</button>
       </header>
 
-      <section id="current-weather">
-        <p>Cargando clima...</p>
-      </section>
+      <div class="top-panels-container">
+        <section id="current-weather">
+          <p class="loading-message">Cargando clima...</p>
+        </section>
 
-      <section id="hourly-weather">
-        <canvas id="hourlyChart" width="600" height="300"></canvas>
-      </section>
+        <section id="hourly-weather">
+          <canvas id="hourlyChart"></canvas>
+        </section>
+      </div>
 
       <section id="forecast"></section>
     </div>

@@ -10,37 +10,52 @@ body {
   padding: 20px;
   display: flex;
   justify-content: center;
+  align-items: flex-start; /* Alinea el contenido arriba */
   min-height: 100vh;
+  box-sizing: border-box; /* Aseguramos que padding y border no aumenten el tamaño */
 }
 
 #weather-app {
-  max-width: 600px;
+  max-width: 960px; /* Ancho máximo del contenedor principal */
   width: 100%;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
   padding: 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Apila los elementos principales verticalmente */
+  gap: 20px; /* Espacio entre el header, top-panels-container y forecast */
 }
 
-/* Búsqueda */
+/* --- Header (Barra de Búsqueda) --- */
 header {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Ya tenemos el gap del #weather-app */
 }
 
-input[type="text"] {
-  flex-grow: 1;
+/* --- CAMBIO CLAVE AQUÍ: Añadimos box-sizing: border-box; a input y button --- */
+input,
+button {
   padding: 10px;
   border-radius: 6px;
   border: none;
   font-size: 1em;
+  box-sizing: border-box; /* ¡ESTO ES LO NUEVO! */
+}
+/* --- FIN DEL CAMBIO --- */
+
+input[type="text"] {
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.4); /* Fondo gris más sólido */
+  color: white;
+}
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 button {
   padding: 10px 16px;
   cursor: pointer;
-  border-radius: 6px;
-  border: none;
   background: rgba(0, 0, 0, 0.4);
   color: white;
   font-weight: bold;
@@ -54,61 +69,104 @@ button:hover {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
 }
 
-/* Ciudad */
-.current-header {
-  background: rgba(0, 0, 0, 0.4);
-  padding: 12px;
-  border-radius: 10px;
-  text-align: center;
-  margin-bottom: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+/* --- Contenedor de paneles superiores (Clima Actual y Gráfico) --- */
+.top-panels-container {
+  display: flex; /* Para poner clima actual y gráfico lado a lado */
+  gap: 20px;
+  flex-wrap: wrap; /* Permite que salten de línea en pantallas pequeñas */
+  justify-content: center; /* Centra los paneles si hay espacio */
 }
 
-/* Clima actual */
-.current-details {
+/* --- Sección Clima Actual --- */
+#current-weather {
   background: rgba(0, 0, 0, 0.4);
   padding: 15px;
   border-radius: 10px;
-  margin-bottom: 20px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  flex: 1; /* Permite que ocupe el espacio disponible */
+  min-width: 280px; /* Ancho mínimo para que no se apriete demasiado */
+  max-width: 45%; /* Limita el ancho máximo para dejar espacio al gráfico */
+  box-sizing: border-box;
 }
 
+.current-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.current-header h2 {
+  margin: 0; /* Elimina el margen por defecto del h2 */
+  font-size: 1.8em; /* Tamaño de fuente más ajustado */
+}
+
+.current-details {
+  text-align: center; /* Centra el contenido del clima actual */
+}
 .current-details p {
-  margin: 8px 0;
-  font-size: 1.1em;
+  margin: 5px 0; /* Márgenes más pequeños para un diseño compacto */
+  font-size: 1em; /* Tamaño de fuente más ajustado */
 }
 
-/* Título del pronóstico */
+.weather-icon-large {
+  display: block;
+  margin: 0 auto 5px; /* Margen inferior ajustado */
+  width: 80px; /* Icono un poco más pequeño */
+  height: 80px;
+}
+
+/* --- Sección Gráfico Horario --- */
+#hourly-weather {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  flex: 1; /* Permite que ocupe el espacio disponible */
+  min-width: 300px; /* Ancho mínimo para el gráfico */
+  max-width: 50%; /* Limita el ancho máximo */
+  box-sizing: border-box;
+}
+
+#hourlyChart {
+  max-width: 100%; /* Asegura que el gráfico no se desborde */
+  height: 200px; /* Altura fija para el gráfico, ajusta si es necesario */
+}
+
+/* --- Sección Pronóstico Detallado (Cuatro Días) --- */
+#forecast {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  width: 100%; /* Ocupa todo el ancho disponible abajo */
+  box-sizing: border-box; /* Asegurar que el padding no cause desborde */
+  overflow-x: hidden;
+}
+
 .forecast-title {
   font-size: 1.3em;
-  margin-bottom: 10px;
+  margin-bottom: 15px; /* Más espacio debajo del título */
   text-align: center;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
-/* Contenedor de pronóstico */
 .forecast-container {
   display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  flex-wrap: wrap; /* Permite que los días salten de línea */
+  justify-content: space-between; /* Distribuye uniformemente */
+  gap: 15px; /* Espacio entre los días */
 }
 
-/* Día del pronóstico */
 .day-forecast {
   background: rgba(0, 0, 0, 0.4);
   padding: 12px;
   border-radius: 10px;
   text-align: center;
-  min-width: 110px;
+  min-width: 120px; /* Ancho mínimo para cada día del pronóstico */
   box-shadow: 0 5px 18px rgba(0, 0, 0, 0.6);
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  flex-basis: calc(33.33% - 10px);
-  max-width: calc(33.33% - 10px);
+  flex-grow: 1; /* Permite que crezcan para llenar el espacio */
+  flex-basis: calc(25% - 11.25px); /* (15px de gap * 3 gaps / 4 items) */
+  max-width: calc(25% - 11.25px); /* Limita el ancho máximo */
+  box-sizing: border-box;
 }
 
 .day-forecast:hover {
@@ -117,83 +175,100 @@ button:hover {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
-/* Gráfico */
-#hourly-weather {
-  max-width: 600px;
-  margin: 20px auto;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-}
 .weather-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   margin-bottom: 8px;
 }
-.weather-icon-large {
-  display: block;
-  margin: 0 auto 10px;
-  width: 100px;
-  height: 100px;
+
+/* --- Mensajes de carga/error --- */
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin-bottom: 0; /* Remueve margen inferior extra */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* MEDIA QUERIES PARA RESPONSIVE */
+.error-message {
+  color: #ffcccc;
+  font-weight: bold;
+}
 
-@media (max-width: 768px) {
-  #weather-app {
-    padding: 15px;
+/* Estilo para el día del pronóstico seleccionado */
+.day-forecast.active {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 5px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* --- MEDIA QUERIES --- */
+
+/* Pantallas medianas y grandes: dos columnas */
+@media (min-width: 901px) {
+  .top-panels-container {
+    flex-direction: row; /* Clima actual y gráfico uno al lado del otro */
+    flex-wrap: nowrap;
+    justify-content: center;
   }
 
-  .day-forecast {
-    flex-basis: calc(50% - 7.5px);
-    max-width: calc(50% - 7.5px);
-    margin-bottom: 15px;
+  #current-weather,
+  #hourly-weather {
+    flex: 1;
+  }
+
+  #forecast {
+    margin-top: 20px;
+  }
+}
+
+/* Pantallas pequeñas: todo se apila verticalmente */
+@media (max-width: 900px) {
+  .top-panels-container {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  #current-weather,
+  #hourly-weather {
+    max-width: 100%;
   }
 
   .forecast-container {
-    justify-content: space-evenly;
+    justify-content: space-around;
+  }
+
+  .day-forecast {
+    flex-basis: calc(50% - 10px);
+    max-width: calc(50% - 10px);
   }
 }
 
-/* Pantallas pequeñas */
-@media (max-width: 480px) {
-  body {
-    padding: 10px;
-  }
-
+@media (max-width: 600px) {
   #weather-app {
-    padding: 15px;
+    padding: 10px;
   }
 
   header {
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
   }
 
-  input[type="text"] {
-    width: 100%;
-  }
-
+  input,
   button {
     width: 100%;
+    padding: 12px;
+    /* Box-sizing: border-box ya se aplica desde la regla general,
+           lo que asegura que el padding de 12px no cause desborde */
   }
 
   .day-forecast {
     flex-basis: 100%;
     max-width: 100%;
-    margin-bottom: 15px;
-  }
-
-  .forecast-container {
-    gap: 0;
-    justify-content: center;
-  }
-
-  .current-header,
-  .current-details,
-  .forecast-title,
-  #hourly-weather {
-    padding: 12px;
   }
 }

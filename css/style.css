@@ -138,7 +138,7 @@ button:hover {
   height: 100px;
 }
 
-/* MEDIA QUERIES PARA RESPONSIVE */
+/* ---MEDIA QUERIES PARA RESPONSIVE--- */
 
 @media (max-width: 768px) {
   #weather-app {

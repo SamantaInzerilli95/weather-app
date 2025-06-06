@@ -1,4 +1,4 @@
-const apiKey = "c8c31816f1c7d878c5b08e7a5b2fb95e"; // ¡IMPORTANTE! Cambia esto por tu clave real antes de subir a GitHub Pages
+const apiKey = "c8c31816f1c7d878c5b08e7a5b2fb95e";
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 const currentWeatherDiv = document.getElementById("current-weather");
@@ -7,9 +7,8 @@ let hourlyChartCanvas = document.getElementById("hourlyChart");
 
 let fullForecastData = null;
 let currentWeatherData = null;
-let hourlyChartInstance = null; // Para guardar la instancia del gráfico Chart.js
+let hourlyChartInstance = null;
 
-// --- NUEVA FUNCIÓN: Muestra un mensaje si la ubicación no está disponible ---
 function showLocationUnavailableMessage() {
   currentWeatherDiv.innerHTML = `
         <p class="loading-message">
@@ -19,26 +18,22 @@ function showLocationUnavailableMessage() {
             O, <strong>busca una ciudad</strong> en el campo de arriba para comenzar.
         </p>
     `;
-  // Limpia el pronóstico y el gráfico
   forecastDiv.innerHTML = "";
-  clearHourlyChart(); // Destruye el gráfico existente y limpia el canvas
+  clearHourlyChart();
 }
 
-// Función para obtener y mostrar clima por ciudad
 async function getWeatherByCity(city) {
   currentWeatherDiv.innerHTML =
     "<p class='loading-message'>Cargando clima...</p>";
   forecastDiv.innerHTML = "";
   clearHourlyChart();
   try {
-    // Petición para el clima actual
     const currentRes = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=es`
     );
     if (!currentRes.ok) throw new Error("Ciudad no encontrada");
     currentWeatherData = await currentRes.json();
 
-    // Petición para el pronóstico
     const forecastRes = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=es`
     );
@@ -46,7 +41,7 @@ async function getWeatherByCity(city) {
 
     showCurrentWeather(currentWeatherData, "current");
     showForecast(fullForecastData);
-    showHourlyChart(fullForecastData, 0); // Mostrar gráfico de "Hoy" inicialmente
+    showHourlyChart(fullForecastData, 0);
   } catch (error) {
     currentWeatherDiv.innerHTML = `<p class="error-message">Error: ${error.message}. Por favor, intenta de nuevo.</p>`;
     forecastDiv.innerHTML = "";
@@ -54,22 +49,19 @@ async function getWeatherByCity(city) {
   }
 }
 
-// Función para obtener y mostrar clima por coordenadas
 async function getWeatherByCoords(lat, lon) {
   currentWeatherDiv.innerHTML =
     "<p class='loading-message'>Cargando clima...</p>";
   forecastDiv.innerHTML = "";
   clearHourlyChart();
   try {
-    // Petición para el clima actual
     const currentRes = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`
     );
     if (!currentRes.ok)
-      throw new new Error("No se pudieron obtener los datos de ubicación.")();
+      throw new Error("No se pudieron obtener los datos de ubicación.");
     currentWeatherData = await currentRes.json();
 
-    // Petición para el pronóstico
     const forecastRes = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`
     );
@@ -77,22 +69,46 @@ async function getWeatherByCoords(lat, lon) {
 
     showCurrentWeather(currentWeatherData, "current");
     showForecast(fullForecastData);
-    showHourlyChart(fullForecastData, 0); // Mostrar gráfico de "Hoy" inicialmente
+    showHourlyChart(fullForecastData, 0);
   } catch (error) {
+    console.error("Error en getWeatherByCoords:", error);
     currentWeatherDiv.innerHTML = `<p class="error-message">Error al obtener datos de ubicación.</p>`;
     forecastDiv.innerHTML = "";
     clearHourlyChart();
   }
 }
 
-// showCurrentWeather ahora acepta un segundo parámetro para el tipo de datos
+function normalizeIconCode(iconCode) {
+  if (typeof iconCode !== "string" || iconCode.trim() === "") {
+    return "01d";
+  }
+
+  // Convertir todos los códigos de "cielo despejado" o "pocas nubes" a '01d'
+  // Esto incluye: '01d', '01n', '02d', '02n'
+  if (
+    iconCode === "01d" ||
+    iconCode === "01n" ||
+    iconCode === "02d" ||
+    iconCode === "02n"
+  ) {
+    return "01d";
+  }
+
+  // Para otros códigos de icono, devolverlos sin cambios
+  return iconCode;
+}
+
 function showCurrentWeather(data, type = "forecast") {
-  // Agregado un fallback más robusto: si el icono no existe, usa '01d' (sol)
-  // También asegúrate de que data.weather y data.weather[0] existan antes de acceder a .icon
-  const iconCode =
-    data.weather && data.weather[0] && data.weather[0].icon
+  let iconCode =
+    data.weather &&
+    data.weather[0] &&
+    typeof data.weather[0].icon === "string" &&
+    data.weather[0].icon.trim() !== ""
       ? data.weather[0].icon
       : "01d";
+
+  iconCode = normalizeIconCode(iconCode);
+
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
 
   let title = "";
@@ -133,7 +149,6 @@ function showForecast(data) {
   const dailyForecasts = [];
   const processedDates = new Set();
 
-  // Iteramos sobre los datos del pronóstico para encontrar un punto por día
   for (const item of data.list) {
     const date = new Date(item.dt * 1000);
     const dayKey = date.toISOString().split("T")[0];
@@ -141,8 +156,7 @@ function showForecast(data) {
     if (!processedDates.has(dayKey)) {
       let representativeItem;
       if (processedDates.size === 0) {
-        // Si es el primer día (Hoy)
-        representativeItem = item; // Tomamos el primer item disponible
+        representativeItem = item;
       } else {
         representativeItem =
           data.list.find((d) => {
@@ -173,11 +187,19 @@ function showForecast(data) {
       dayLabel = date.toLocaleDateString("es-ES", options);
     }
 
-    // Agregado un fallback aquí también para los iconos del pronóstico
-    const iconCode =
-      item.weather && item.weather[0] && item.weather[0].icon
+    let iconCode =
+      item.weather &&
+      item.weather[0] &&
+      typeof item.weather[0].icon === "string" &&
+      item.weather[0].icon.trim() !== ""
         ? item.weather[0].icon
         : "01d";
+
+    // Aplicar la normalización para el icono pequeño de "Hoy" (index === 0)
+    if (index === 0) {
+      iconCode = normalizeIconCode(iconCode);
+    }
+
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
     const itemDateStr = date.toISOString().split("T")[0];
 
@@ -205,7 +227,6 @@ function showForecast(data) {
 function showHourlyChart(fullData, dayIndex) {
   let hourlyDataToDisplay;
 
-  // Si dayIndex es 0 (Hoy), mostramos las próximas 24 horas (8 intervalos de 3h)
   if (dayIndex === 0) {
     hourlyDataToDisplay = fullData.list.slice(0, 8);
   } else {
@@ -281,7 +302,6 @@ function clearHourlyChart() {
   }
 }
 
-// Nueva función para añadir los listeners a los días del pronóstico
 function addForecastDayClickListeners() {
   const dayForecasts = document.querySelectorAll(".day-forecast");
   dayForecasts.forEach((dayDiv) => {
@@ -293,11 +313,8 @@ function addForecastDayClickListeners() {
 
       if (fullForecastData) {
         if (dayIndex === 0) {
-          // Si es "Hoy", volvemos a mostrar los datos del clima actual
           showCurrentWeather(currentWeatherData, "current");
         } else {
-          // Para cualquier otro día, tomamos un dato representativo del día seleccionado
-          // y lo pasamos a showCurrentWeather
           const selectedDateStr = dayDiv.dataset.date;
           const representativeForecastItem = fullForecastData.list.find(
             (item) => {
@@ -310,7 +327,6 @@ function addForecastDayClickListeners() {
             showCurrentWeather(representativeForecastItem, "forecast");
           }
         }
-        // Actualizar el gráfico horario para el día seleccionado
         showHourlyChart(fullForecastData, dayIndex);
       }
     });
@@ -324,9 +340,6 @@ function addForecastDayClickListeners() {
   }
 }
 
-// --- EVENT LISTENERS ---
-
-// Evento para botón buscar
 searchBtn.addEventListener("click", () => {
   const city = cityInput.value.trim();
   if (city) {
@@ -339,16 +352,12 @@ searchBtn.addEventListener("click", () => {
   }
 });
 
-// Evento para presionar Enter en el input de búsqueda
 cityInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     searchBtn.click();
   }
 });
 
-// --- INICIALIZACIÓN DE LA APLICACIÓN AL CARGAR LA PÁGINA ---
-
-// Al cargar la página, pedir ubicación y mostrar clima
 window.onload = () => {
   currentWeatherDiv.innerHTML =
     "<p class='loading-message'>Cargando ubicación...</p>";
@@ -360,10 +369,10 @@ window.onload = () => {
       },
       (error) => {
         console.error("Error al obtener la ubicación:", error);
-        showLocationUnavailableMessage(); // Muestra el mensaje personalizado
+        showLocationUnavailableMessage();
       }
     );
   } else {
-    showLocationUnavailableMessage(); // Muestra el mensaje personalizado
+    showLocationUnavailableMessage();
   }
 };

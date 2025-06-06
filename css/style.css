@@ -1,0 +1,259 @@
+body {
+  font-family: Arial, sans-serif;
+  background: rgba(0, 0, 0, 0.5);
+  background-image: url("../img/image.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+#weather-app {
+  max-width: 960px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+input,
+button {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+}
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+button {
+  padding: 10px 16px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+.top-panels-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#current-weather {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  flex: 1;
+  min-width: 280px;
+  max-width: 45%;
+  box-sizing: border-box;
+}
+
+.current-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.current-header h2 {
+  margin: 0;
+  font-size: 1.8em;
+}
+
+.current-details {
+  text-align: center;
+}
+.current-details p {
+  margin: 5px 0;
+  font-size: 1em;
+}
+
+.weather-icon-large {
+  display: block;
+  margin: 0 auto 5px;
+  width: 80px;
+  height: 80px;
+}
+
+#hourly-weather {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  flex: 1;
+  min-width: 300px;
+  max-width: 50%;
+  box-sizing: border-box;
+}
+
+#hourlyChart {
+  max-width: 100%;
+  height: 200px;
+}
+
+#forecast {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.forecast-title {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.forecast-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.day-forecast {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 120px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  flex-grow: 1;
+  flex-basis: calc(25% - 11.25px);
+  max-width: calc(25% - 11.25px);
+  box-sizing: border-box;
+}
+
+.day-forecast:hover {
+  transform: scale(1.08);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.weather-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin-bottom: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.error-message {
+  color: #ffcccc;
+  font-weight: bold;
+}
+
+.day-forecast.active {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 5px 20px rgba(0, 0, 0, 0.7);
+}
+
+@media (min-width: 901px) {
+  .top-panels-container {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+
+  #current-weather,
+  #hourly-weather {
+    flex: 1;
+  }
+
+  #forecast {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .top-panels-container {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  #current-weather,
+  #hourly-weather {
+    max-width: 100%;
+  }
+
+  .forecast-container {
+    justify-content: space-around;
+  }
+
+  .day-forecast {
+    flex-basis: calc(50% - 10px);
+    max-width: calc(50% - 10px);
+  }
+}
+
+@media (max-width: 600px) {
+  #weather-app {
+    padding: 10px;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  input,
+  button {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .day-forecast {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}

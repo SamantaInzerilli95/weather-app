@@ -1,0 +1,30 @@
+name: Desplegar la Página del Clima a GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Reemplazar la Clave de API en el archivo JavaScript
+        run: |
+          sed -i "s|%%%CLAVE_API_CLIMA%%%|${{ secrets.API_CLIMA_SECRETA }}|g" main.js
+        working-directory: ./js
+
+      - name: Desplegar la página a GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./

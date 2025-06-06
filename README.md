@@ -22,6 +22,7 @@ Una aplicación web sencilla y elegante para obtener información meteorológica
 
 - **Clima actual**: Temperatura, descripción, viento y un icono representativo para el momento.
 - **Pronóstico extendido**: Predicción para el día actual y los próximos 3 días (un total de 4 días) con sus datos clave.
+  - **Nota Importante**: Es normal observar pequeñas diferencias en la temperatura o el viento entre la sección de "Clima actual" (la tarjeta grande) y la miniatura de "Hoy" en el pronóstico. Esto ocurre porque se utilizan dos fuentes de datos distintas de la API: una para el **clima observado en tiempo real** y otra para un **pronóstico por intervalos de 3 horas**. ¡Es el comportamiento esperado y preciso de los datos meteorológicos!
 - **Gráfico horario**: Visualización interactiva de la temperatura por hora para el día seleccionado.
 - **Detección de ubicación**: Obtiene automáticamente el clima de tu ubicación actual (con tu permiso).
 - **Búsqueda por ciudad**: Buscá el clima de cualquier ciudad globalmente.

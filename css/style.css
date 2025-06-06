@@ -1,0 +1,199 @@
+body {
+  font-family: Arial, sans-serif;
+  background: rgba(0, 0, 0, 0.5);
+  background-image: url("../img/image.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#weather-app {
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Búsqueda */
+header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+}
+
+button {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+/* Ciudad */
+.current-header {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+}
+
+/* Clima actual */
+.current-details {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.current-details p {
+  margin: 8px 0;
+  font-size: 1.1em;
+}
+
+/* Título del pronóstico */
+.forecast-title {
+  font-size: 1.3em;
+  margin-bottom: 10px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Contenedor de pronóstico */
+.forecast-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+/* Día del pronóstico */
+.day-forecast {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 110px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  flex-basis: calc(33.33% - 10px);
+  max-width: calc(33.33% - 10px);
+}
+
+.day-forecast:hover {
+  transform: scale(1.08);
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+/* Gráfico */
+#hourly-weather {
+  max-width: 600px;
+  margin: 20px auto;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+.weather-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 8px;
+}
+.weather-icon-large {
+  display: block;
+  margin: 0 auto 10px;
+  width: 100px;
+  height: 100px;
+}
+
+/* MEDIA QUERIES PARA RESPONSIVE */
+
+@media (max-width: 768px) {
+  #weather-app {
+    padding: 15px;
+  }
+
+  .day-forecast {
+    flex-basis: calc(50% - 7.5px);
+    max-width: calc(50% - 7.5px);
+    margin-bottom: 15px;
+  }
+
+  .forecast-container {
+    justify-content: space-evenly;
+  }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  #weather-app {
+    padding: 15px;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .day-forecast {
+    flex-basis: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .forecast-container {
+    gap: 0;
+    justify-content: center;
+  }
+
+  .current-header,
+  .current-details,
+  .forecast-title,
+  #hourly-weather {
+    padding: 12px;
+  }
+}
